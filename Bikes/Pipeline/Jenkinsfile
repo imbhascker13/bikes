@@ -44,11 +44,11 @@ node {
         server.upload(uploadSpec)
         
         }
-	 dir(project-path/Pipeline){
+	
    stage('Docker-Stage-Deployment') {
    sh label: '', script: 'docker-compose up -d --build'
   }
-	 }
+	 
  	 stage('Input') {
                 input('Do you want to proceed?')           
         }
