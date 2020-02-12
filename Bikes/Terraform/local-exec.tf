@@ -6,11 +6,11 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-west-1"
-  }
+  region = "us-west-2"
+  
+}
 
 resource "aws_instance" "backend" {
-  
   ami                    = "ami-02d0ea44ae3fe9561"
   instance_type          = "t2.micro"
   key_name               = "${var.key_name}"
@@ -39,11 +39,10 @@ provisioner "local-exec" {
   command = <<EOT
         sleep 100;
         > jenkins-ci.ini;
-        > index.html
         echo "[jenkins-ci]"| tee -a jenkins-ci.ini;
         export ANSIBLE_HOST_KEY_CHECKING=False;
         echo "${aws_instance.backend.public_ip}" | tee -a jenkins-ci.ini;
-        ansible-playbook  --key=${var.pvt_key} -i jenkins-ci.ini webplaybook.yaml -u ubuntu -v
+        ansible-playbook  --key=${var.pvt_key} -i jenkins-ci.ini ./ansible/04-Tomcat/web-playbook.yaml -u ubuntu -v
     EOT
 }
 }
