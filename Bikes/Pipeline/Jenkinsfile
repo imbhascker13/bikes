@@ -59,7 +59,7 @@ node {
 }  
  }
  
-	 def terra_path="Bikes/Terraform"
+	 def terra_path="Bikes/Terraform/"
 	 dir(terra_path){
    stage('Prod Deployment on AWS'){
    sh label: 'terraform', script: '/bin/terraform  init'
