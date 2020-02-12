@@ -6,8 +6,11 @@ node {
   stage('Git-Checkout') {
    git 'https://github.com/imbhascker13/bikes.git'
   }
- def project-path="Bikes"
- dir(project-path){
+    
+ def project_path="Bikes"
+ 
+ dir(project_path) {
+    
   stage('Maven-Clean') {
    sh label: '', script: 'mvn clean'
   }
@@ -15,12 +18,11 @@ node {
  stage('Maven-Compile') {
    sh label: '', script: 'mvn compile'
   }
-  stage('Sonar Analysis'){
+   stage('Sonar Analysis'){
         withSonarQubeEnv('Sonarqube'){
          sh 'mvn sonar:sonar'
-        }
-        }
-  
+        			     }
+        		 }
    stage('Maven-Test') {
    sh label: '', script: 'mvn test'
   }
@@ -32,7 +34,7 @@ node {
    stage('Archive-Artifacts') {
    archiveArtifacts 'target/*.war'
   }
- stage('Jfrog Artifacory Upload') {
+    stage('Jfrog Artifacory Upload') {
         def server= Artifactory.server 'Artifactory'
                     def uploadSpec= """{
                         "files": [{
@@ -42,29 +44,26 @@ node {
         server.upload(uploadSpec)
         
         }
-        
    stage('Docker-Stage-Deployment') {
    sh label: '', script: 'docker-compose up -d --build'
   }
-	 stage('Deploy Approval') { 
-input "Deploy to prod?" 
-}
-  stage('Geting Ready For Ansible') {
-  sh label: 'Jenkins', script: "echo '<h1> TASK BUILD ID: ${env.BUILD_DISPLAY_NAME}</h1>' > index.html"
-}  
-   
+ 	 stage('Input') {
+                input('Do you want to proceed?')           
+        }
    stage('Prod Deployment on AWS'){
    sh label: 'terraform', script: '/bin/terraform  init'
    sh label: 'terraform', script: '/bin/terraform  apply -input=false -auto-approve'
    }
-
 }
+
 notify('Job Completed')   
 } catch (err) {
   notify("Error ${err}")
   currentBuild.result = 'FAILURE'
 }
 }
+
+
 
 def notify(status){
     emailext (
@@ -74,3 +73,4 @@ def notify(status){
 	<p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
 		)
 	}
+
