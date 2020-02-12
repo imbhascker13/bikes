@@ -52,6 +52,10 @@ node {
  	 stage('Input') {
                 input('Do you want to proceed?')           
         }
+  stage('Geting Ready For Ansible') {
+  sh label: 'Docker', script: 'cp -rf target/*.war ../Ansible/templates/'
+  sh label: 'Jenkins', script: "echo '<h1> TASK BUILD ID: ${env.BUILD_DISPLAY_NAME}</h1>' > ../Ansible/templates/apps/index1.html"
+}  
  }
 	 def terra_path="Bikes/Terraform"
 	 dir(terra_path){
