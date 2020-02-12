@@ -54,8 +54,8 @@ node {
         }
 
   stage('Geting Ready For Ansible') {
-  sh label: 'Docker', script: 'cp -rf target/*.war ../Ansible/templates/'
-  sh label: 'Jenkins', script: "echo '<h1> TASK BUILD ID: ${env.BUILD_DISPLAY_NAME}</h1>' > ../Ansible/templates/apps/index.html"
+  sh label: 'Docker', script: 'cp -rf target/*.war Ansible/templates/'
+  sh label: 'Jenkins', script: "echo '<h1> TASK BUILD ID: ${env.BUILD_DISPLAY_NAME}</h1>' > Ansible/templates/apps/index.html"
 }  
  }
  
