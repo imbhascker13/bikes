@@ -4,7 +4,7 @@ node {
 
      
   stage('Git-Checkout') {
-   git 'https://github.com/natam369/bikeshop.git'
+   git 'https://github.com/imbhascker13/bikes.git'
   }
  
   stage('Maven-Clean') {
@@ -35,8 +35,8 @@ node {
         def server= Artifactory.server 'Artifactory'
                     def uploadSpec= """{
                         "files": [{
-                        "pattern": "/target/*.war",
-                        "target": "natam"}]
+                        "pattern": "target/*.war",
+                        "target": "petc"}]
                     }"""
         server.upload(uploadSpec)
         
@@ -67,7 +67,7 @@ notify('Job Completed')
 
 def notify(status){
     emailext (
-	to: "natammegasachin369@gmail.com",
+	to: "bhaskarreddygbr7@gmail.com",
 	subject: "${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
 	 body: """<p>${status}: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
 	<p>Check console output at <a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a></p>""",
